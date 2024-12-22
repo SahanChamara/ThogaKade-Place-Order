@@ -9,7 +9,6 @@ import thogakade.View.PlaceOrder;
  * @author Sahan Chamara
  */
 public class ThogaKade {
-
     /**
      * @param args the command line arguments
      */

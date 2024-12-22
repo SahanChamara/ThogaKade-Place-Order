@@ -22,6 +22,9 @@ import thogakade.Model.OrderDetails;
  * @author Sahan Chamara
  */
 public class PlaceOrder extends javax.swing.JFrame {
+    private double totalPrice;
+    private int quantity;
+    private int qtyOnHand;
 
     /**
      * Creates new form PlaceOrder
@@ -328,6 +331,11 @@ public class PlaceOrder extends javax.swing.JFrame {
         btnPlaceOrder.setBackground(new java.awt.Color(233, 213, 39));
         btnPlaceOrder.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnPlaceOrder.setText("Place Order");
+        btnPlaceOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlaceOrderActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnPlaceOrder);
         btnPlaceOrder.setBounds(757, 570, 121, 37);
 
@@ -359,28 +367,26 @@ public class PlaceOrder extends javax.swing.JFrame {
         String description = txtDesc.getText();
         int qty = Integer.parseInt(txtQty.getText());
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
+        
+        // this quantity and qtyOnHand variables are used for the update the item table qtyonhand
+        quantity = Integer.parseInt(txtQty.getText());
+        qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
 
         ArrayList<OrderDetails> orderDetails = PlaceOrderController.loadTable(code, description, qty, unitPrice);
         DefaultTableModel dtm = (DefaultTableModel) tblItems.getModel();
 
         //Calculating Total price (set the lable)
-        double total=0;
-        double totalPrice = 0;
+//        double totalPrice = 0;
 
         for (OrderDetails orderDetail : orderDetails) {
             
             Object[] rowData = {orderDetail.getItemCode(), orderDetail.getDescription(), orderDetail.getQty(), orderDetail.getUnitPrice(), orderDetail.getTotal()};
 
             dtm.addRow(rowData);
-//            totalPrice += orderDetail.getTotal();
-//            lblTotal.setText(String.valueOf(totalPrice));
-                total+=orderDetail.getTotal();
+            totalPrice+=orderDetail.getTotal();
         }
-
-        totalPrice += total;
+        
         lblTotal.setText(String.valueOf(totalPrice));
-
-
     }//GEN-LAST:event_btnAddItemActionPerformed
 
     private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveItemActionPerformed
@@ -415,6 +421,28 @@ public class PlaceOrder extends javax.swing.JFrame {
             System.out.println("SQL Exception " + ex.getMessage());
         }
     }//GEN-LAST:event_comboItemCodeItemStateChanged
+
+    private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
+        try {
+            // Updating the Order Table
+            boolean tableIsUpdate = PlaceOrderController.updateOrderTable(lblOrderId.getText(),lblDate.getText(),comboCusId.getSelectedItem().toString());            
+            
+            if(tableIsUpdate){
+                System.out.println("Order Table Updated");
+            }
+            
+            // Updating the Item Table QtyonHand
+            boolean qtyOnHandUpdate = PlaceOrderController.updateItemTalbeQty(comboItemCode.getSelectedItem().toString(),quantity,qtyOnHand);
+            if(qtyOnHandUpdate){
+                System.out.println("qty on hand updated");
+            }
+            
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class Not Found Exception " + ex.getMessage());
+        } catch (SQLException ex) {
+            System.out.println("SQL Exception " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     /**
      * @param args the command line arguments
