@@ -24,8 +24,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         
         //Addint the Date
         String showDate = PlaceOrderController.showDate();
-        lblDate.setText(showDate);
-        
+        lblDate.setText(showDate);        
     }
     /**
      * This method is called from within the constructor to initialize the form.
