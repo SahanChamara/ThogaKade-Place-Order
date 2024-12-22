@@ -23,14 +23,7 @@ public class ThogaKade {
      * @param args the command line arguments
      */
     public static void main(String[] args) {      
-        new PlaceOrder().setVisible(true);
-        try {
-            System.out.println(PlaceOrderController.generateOrderId());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ThogaKade.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ThogaKade.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        new PlaceOrder().setVisible(true);        
     }
     
 }
