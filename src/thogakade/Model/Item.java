@@ -11,13 +11,13 @@ package thogakade.Model;
 public class Item {
     private String code;
     private String description;
-    private int unitPrice;
+    private double unitPrice;
     private int qtyOnHand;
 
     public Item() {
     }
 
-    public Item(String code, String description, int unitPrice, int qtyOnHand) {
+    public Item(String code, String description, double unitPrice, int qtyOnHand) {
         this.code = code;
         this.description = description;
         this.unitPrice = unitPrice;
@@ -40,11 +40,11 @@ public class Item {
         this.description = description;
     }
 
-    public int getUnitPrice() {
+    public double getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(int unitPrice) {
+    public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
     }
 

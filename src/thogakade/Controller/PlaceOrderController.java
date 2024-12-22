@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import thogakade.DBConnection.DBConnection;
 import thogakade.Model.Customer;
+import thogakade.Model.Item;
 
 /**
  *
@@ -55,6 +56,46 @@ public class PlaceOrderController {
             customerIdList.add(new Customer(rst.getString("id"), null, null, 0));            
         }
         return customerIdList;
+    }
+
+    // Add Customer name for selecting combo box id
+    public static String getCustomerName(String id) throws ClassNotFoundException, SQLException{
+        Statement stm = DBConnection.getInstance().getConnection().createStatement();
+        ResultSet rst = stm.executeQuery("select name from customer where id='"+id+"'");
+        if(rst.next()){
+            return rst.getString("name");
+        }        
+        return null;
+    }
+    
+    // Add item ID for Combo Box
+    public static ArrayList<Item> getItemCode() throws ClassNotFoundException, SQLException{
+        ArrayList<Item> itemCodeList = new ArrayList<>();
+        
+        Statement stm = DBConnection.getInstance().getConnection().createStatement();
+        ResultSet rst = stm.executeQuery("select code from item");
+        while(rst.next()){
+            itemCodeList.add(new Item(rst.getString("code"), null, 0, 0));
+        }
+        return itemCodeList;
+    }
+    
+    // Add selected item for text feilds
+    public static ArrayList<Item> getItemDetails(String itemCode) throws ClassNotFoundException, SQLException{
+        ArrayList<Item> itemList = new ArrayList<>();
+        
+        Statement stm = DBConnection.getInstance().getConnection().createStatement();
+        ResultSet rst = stm.executeQuery("select description,unitPrice,qtyOnHand from item where code='"+itemCode+"'");
+        if(rst.next()){
+            itemList.add(new Item(null, rst.getString("description"), rst.getDouble("unitPrice"), rst.getInt("qtyOnHand")));            
+        }
+        return itemList;        
+    }
+    
+    // Adding the item for table
+    public static ArrayList loadTable(String code, String description, int qty, double unitPrice){
+        ArrayList tableDetails = new ArrayList();
+        
     }
 
 }

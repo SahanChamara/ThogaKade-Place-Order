@@ -3,16 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package thogakade;
-
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import thogakade.Controller.PlaceOrderController;
-import thogakade.DBConnection.DBConnection;
 import thogakade.View.PlaceOrder;
-
-
-
 /**
  *
  * @author Sahan Chamara
