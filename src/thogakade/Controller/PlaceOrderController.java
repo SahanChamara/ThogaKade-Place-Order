@@ -30,7 +30,7 @@ public class PlaceOrderController {
     // generating order ID
     public static String generateOrderId() throws ClassNotFoundException, SQLException {
         Statement stm = DBConnection.getInstance().getConnection().createStatement();
-        ResultSet rst = stm.executeQuery("select id from orders");
+        ResultSet rst = stm.executeQuery("select id from orders order by id asc");
 
         String newId = null;
         if (rst.next()) {
@@ -38,13 +38,14 @@ public class PlaceOrderController {
         }
         while (rst.next()) {            
             newId = rst.getString("id");
-            rst.next();
+            System.out.println(newId);
+//            rst.next();            
         }
         if (newId == null) {
             return "D001";
         } else {
-            int id = Integer.parseInt(newId.substring(1, 4));
-            return String.format("D%03d", id + 2);
+            int id = Integer.parseInt(newId.substring(1, 4));            
+            return String.format("D%03d", id + 1);            
         }
     }
 
