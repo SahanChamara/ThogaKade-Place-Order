@@ -11,6 +11,7 @@ package thogakade.Model;
 public class OrderDetails {
     private String orderId;
     private String itemCode;
+    private String description;
     private int qty;
     private double unitPrice;
     private double total;
@@ -18,14 +19,15 @@ public class OrderDetails {
     public OrderDetails() {
     }
 
-    public OrderDetails(String orderId, String itemCode, int qty, double unitPrice, double total) {
+    public OrderDetails(String orderId, String itemCode, String description, int qty, double unitPrice, double total) {
         this.orderId = orderId;
         this.itemCode = itemCode;
+        this.description = description;
         this.qty = qty;
         this.unitPrice = unitPrice;
         this.total = total;
     }
-
+    
     public String getOrderId() {
         return orderId;
     }
@@ -40,6 +42,14 @@ public class OrderDetails {
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getQty() {
@@ -65,11 +75,10 @@ public class OrderDetails {
     public void setTotal(double total) {
         this.total = total;
     }
-
+    
     @Override
     public String toString() {
-        return orderId+","+itemCode+","+qty+","+unitPrice+","+total;
+        return orderId+","+itemCode+","+description+","+qty+","+unitPrice+","+total;
     }
-    
     
 }

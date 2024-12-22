@@ -10,9 +10,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import thogakade.Controller.PlaceOrderController;
 import thogakade.Model.Customer;
 import thogakade.Model.Item;
+import thogakade.Model.OrderDetails;
 
 /**
  *
@@ -254,7 +257,6 @@ public class PlaceOrder extends javax.swing.JFrame {
         getContentPane().add(txtQtyOnHand);
         txtQtyOnHand.setBounds(590, 220, 126, 26);
 
-        txtQty.setEditable(false);
         txtQty.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtQty.setText("qty");
         txtQty.addActionListener(new java.awt.event.ActionListener() {
@@ -291,10 +293,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         tblItems.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         tblItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Code", "Description", "Qty", "Unit Price", "Total"
@@ -308,6 +307,8 @@ public class PlaceOrder extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        tblItems.setAlignmentY(2.0F);
+        tblItems.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(tblItems);
 
         getContentPane().add(jScrollPane1);
@@ -354,14 +355,32 @@ public class PlaceOrder extends javax.swing.JFrame {
     }//GEN-LAST:event_txtQtyActionPerformed
 
     private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
-        String code = comboCusId.getSelectedItem().toString();
+        String code = comboItemCode.getSelectedItem().toString();
         String description = txtDesc.getText();
         int qty = Integer.parseInt(txtQty.getText());
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
-        
-        PlaceOrderController.loadTable(code,description,qty,unitPrice);
-        
-        
+
+        ArrayList<OrderDetails> orderDetails = PlaceOrderController.loadTable(code, description, qty, unitPrice);
+        DefaultTableModel dtm = (DefaultTableModel) tblItems.getModel();
+
+        //Calculating Total price (set the lable)
+        double total=0;
+        double totalPrice = 0;
+
+        for (OrderDetails orderDetail : orderDetails) {
+            
+            Object[] rowData = {orderDetail.getItemCode(), orderDetail.getDescription(), orderDetail.getQty(), orderDetail.getUnitPrice(), orderDetail.getTotal()};
+
+            dtm.addRow(rowData);
+//            totalPrice += orderDetail.getTotal();
+//            lblTotal.setText(String.valueOf(totalPrice));
+                total+=orderDetail.getTotal();
+        }
+
+        totalPrice += total;
+        lblTotal.setText(String.valueOf(totalPrice));
+
+
     }//GEN-LAST:event_btnAddItemActionPerformed
 
     private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveItemActionPerformed
