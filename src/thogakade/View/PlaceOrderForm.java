@@ -114,6 +114,17 @@ public class PlaceOrderForm extends javax.swing.JFrame {
         }
         return -1;
     }
+    
+    // Calculating the all adding Items Total
+    private void calculateTotal(){
+        double finalTotal = 0;
+        
+        DefaultTableModel dtm = (DefaultTableModel) tblItems.getModel();
+        for (int i = 0; i <dtm.getRowCount(); i++){
+            finalTotal+= (double)dtm.getValueAt(i, 4);
+        }
+        lblTotal.setText(String.valueOf(finalTotal));
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -213,7 +224,7 @@ public class PlaceOrderForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnAddCustomer);
-        btnAddCustomer.setBounds(284, 128, 134, 22);
+        btnAddCustomer.setBounds(284, 128, 170, 22);
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setText("Code : ");
@@ -364,7 +375,7 @@ public class PlaceOrderForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCustomerActionPerformed
-        // TODO add your handling code here:
+        new AddCustomerForm().setVisible(true);
     }//GEN-LAST:event_btnAddCustomerActionPerformed
 
     private void comboItemCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboItemCodeActionPerformed
@@ -408,12 +419,17 @@ public class PlaceOrderForm extends javax.swing.JFrame {
             dtm.setValueAt(total, alreadyExistItemRow, 4);
         }
         txtQty.setText("");
+        calculateTotal();
 
 
     }//GEN-LAST:event_btnAddItemActionPerformed
 
     private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveItemActionPerformed
-        // TODO add your handling code here:
+        DefaultTableModel dtm = (DefaultTableModel)tblItems.getModel();
+        int selectedRow = tblItems.getSelectedRow();
+        dtm.removeRow(selectedRow);
+        
+        calculateTotal();
     }//GEN-LAST:event_btnRemoveItemActionPerformed
 
     private void comboCusIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboCusIdItemStateChanged
