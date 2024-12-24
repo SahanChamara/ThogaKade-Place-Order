@@ -21,6 +21,7 @@ import thogakade.Controller.PlaceOrderController;
 import thogakade.Model.Customer;
 import thogakade.Model.Item;
 import thogakade.Model.OrderDetail;
+import thogakade.Model.Orders;
 
 /**
  *
@@ -458,7 +459,34 @@ public class PlaceOrderForm extends javax.swing.JFrame {
     }//GEN-LAST:event_comboItemCodeItemStateChanged
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
-
+        // Getting the orderId,date,CustomerID for Send to the Orders Table
+        String orderId = lblOrderId.getText();
+        String date = lblDate.getText();
+        String customerId = comboCusId.getSelectedItem().toString();
+        
+        // getting the orderId , itemCode , qty , unitPrice for send to the OrderDetail table
+        ArrayList<OrderDetail> orderDetailList = new ArrayList<>();
+        for (int i = 0; i < tblItems.getRowCount(); i++){
+            String itemCode = (String) tblItems.getValueAt(i, 0);
+            int qty = (int) tblItems.getValueAt(i, 2);
+            double unitPrice = (double) tblItems.getValueAt(i, 3);
+            
+            OrderDetail orderDetail = new OrderDetail(orderId, itemCode, qty, unitPrice);
+            orderDetailList.add(orderDetail);
+        }
+        
+        Orders orders = new Orders(orderId, date, customerId, orderDetailList);
+        try {
+            boolean isAdded = OrderController.placeOrder(orders);
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PlaceOrderForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(PlaceOrderForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     /**

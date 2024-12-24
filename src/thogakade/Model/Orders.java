@@ -10,16 +10,16 @@ import java.util.ArrayList;
  *
  * @author Sahan Chamara
  */
-public class Order {
+public class Orders {
     private String id;
     private String date;
     private String customerId;
     private ArrayList<OrderDetail> orderDetailList;
 
-    public Order() {
+    public Orders() {
     }
 
-    public Order(String id, String date, String customerId, ArrayList<OrderDetail> orderDetailList) {
+    public Orders(String id, String date, String customerId, ArrayList<OrderDetail> orderDetailList) {
         this.id = id;
         this.date = date;
         this.customerId = customerId;
