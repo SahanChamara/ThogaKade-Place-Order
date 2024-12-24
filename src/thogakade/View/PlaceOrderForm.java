@@ -22,7 +22,7 @@ import thogakade.Model.OrderDetail;
  *
  * @author Sahan Chamara
  */
-public class PlaceOrder extends javax.swing.JFrame {
+public class PlaceOrderForm extends javax.swing.JFrame {
     private double totalPrice;
     private int quantity;
     private int qtyOnHand;
@@ -30,7 +30,7 @@ public class PlaceOrder extends javax.swing.JFrame {
     /**
      * Creates new form PlaceOrder
      */
-    public PlaceOrder() {
+    public PlaceOrderForm() {
         setLocationRelativeTo(null);
         initComponents();
 

@@ -3,17 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package thogakade;
-import thogakade.View.PlaceOrder;
+import thogakade.View.AddCustomerForm;
+import thogakade.View.PlaceOrderForm;
 /**
  *
  * @author Sahan Chamara
  */
-public class ThogaKade {
+public class ThogaKadeMain {
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {      
-        new PlaceOrder().setVisible(true);        
+//        new PlaceOrderForm().setVisible(true);        
+           new AddCustomerForm().setVisible(true);
     }
     
 }
