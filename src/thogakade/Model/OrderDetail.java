@@ -8,26 +8,22 @@ package thogakade.Model;
  *
  * @author Sahan Chamara
  */
-public class OrderDetails {
+public class OrderDetail {
     private String orderId;
     private String itemCode;
-    private String description;
     private int qty;
     private double unitPrice;
-    private double total;
 
-    public OrderDetails() {
+    public OrderDetail() {
     }
 
-    public OrderDetails(String orderId, String itemCode, String description, int qty, double unitPrice, double total) {
+    public OrderDetail(String orderId, String itemCode, int qty, double unitPrice) {
         this.orderId = orderId;
         this.itemCode = itemCode;
-        this.description = description;
         this.qty = qty;
         this.unitPrice = unitPrice;
-        this.total = total;
     }
-    
+
     public String getOrderId() {
         return orderId;
     }
@@ -42,14 +38,6 @@ public class OrderDetails {
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getQty() {
@@ -68,17 +56,11 @@ public class OrderDetails {
         this.unitPrice = unitPrice;
     }
 
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-    
     @Override
     public String toString() {
-        return orderId+","+itemCode+","+description+","+qty+","+unitPrice+","+total;
+        return orderId+","+itemCode+","+qty+","+unitPrice;
     }
+    
+    
     
 }

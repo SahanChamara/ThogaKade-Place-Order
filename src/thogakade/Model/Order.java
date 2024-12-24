@@ -4,6 +4,8 @@
  */
 package thogakade.Model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Sahan Chamara
@@ -12,14 +14,16 @@ public class Order {
     private String id;
     private String date;
     private String customerId;
+    private ArrayList<OrderDetail> orderDetailList;
 
     public Order() {
     }
 
-    public Order(String id, String date, String customerId) {
+    public Order(String id, String date, String customerId, ArrayList<OrderDetail> orderDetailList) {
         this.id = id;
         this.date = date;
         this.customerId = customerId;
+        this.orderDetailList = orderDetailList;
     }
 
     public String getId() {
@@ -46,10 +50,23 @@ public class Order {
         this.customerId = customerId;
     }
 
+    public ArrayList<OrderDetail> getOrderDetailList() {
+        return orderDetailList;
+    }
+
+    public void setOrderDetailList(ArrayList<OrderDetail> orderDetailList) {
+        this.orderDetailList = orderDetailList;
+    }
+
     @Override
     public String toString() {
-       return id+","+date+","+customerId;
+        return id+","+date+","+customerId+","+orderDetailList;
     }
+    
+    
+    
+
+    
     
     
     

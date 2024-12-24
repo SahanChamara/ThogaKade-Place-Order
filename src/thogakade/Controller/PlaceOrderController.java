@@ -15,7 +15,7 @@ import java.util.Date;
 import thogakade.DBConnection.DBConnection;
 import thogakade.Model.Customer;
 import thogakade.Model.Item;
-import thogakade.Model.OrderDetails;
+import thogakade.Model.OrderDetail;
 
 /**
  *
@@ -96,12 +96,12 @@ public class PlaceOrderController {
     }
     
     // Adding the item for table
-    public static ArrayList<OrderDetails> loadTable(String code, String description, int qty, double unitPrice){        
-        ArrayList<OrderDetails> tableDetails = new ArrayList();
+    public static ArrayList<OrderDetail> loadTable(String code, String description, int qty, double unitPrice){        
+        ArrayList<OrderDetail> tableDetails = new ArrayList();
         
         double tot = qty*unitPrice;
         
-        tableDetails.add(new OrderDetails(null,code,description,qty,unitPrice,tot));
+        tableDetails.add(new OrderDetail(null,code,description,qty,unitPrice,tot));
         
 //        for (int i = 0; i < tableDetails.size(); i++){                
 //            OrderDetails od = tableDetails.get(i);

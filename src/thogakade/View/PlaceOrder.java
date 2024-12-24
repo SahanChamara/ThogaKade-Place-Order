@@ -15,7 +15,7 @@ import javax.swing.table.TableModel;
 import thogakade.Controller.PlaceOrderController;
 import thogakade.Model.Customer;
 import thogakade.Model.Item;
-import thogakade.Model.OrderDetails;
+import thogakade.Model.OrderDetail;
 
 /**
  *
@@ -372,13 +372,13 @@ public class PlaceOrder extends javax.swing.JFrame {
         quantity = Integer.parseInt(txtQty.getText());
         qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
 
-        ArrayList<OrderDetails> orderDetails = PlaceOrderController.loadTable(code, description, qty, unitPrice);
+        ArrayList<OrderDetail> orderDetails = PlaceOrderController.loadTable(code, description, qty, unitPrice);
         DefaultTableModel dtm = (DefaultTableModel) tblItems.getModel();
 
         //Calculating Total price (set the lable)
 //        double totalPrice = 0;
 
-        for (OrderDetails orderDetail : orderDetails) {
+        for (OrderDetail orderDetail : orderDetails) {
             
             Object[] rowData = {orderDetail.getItemCode(), orderDetail.getDescription(), orderDetail.getQty(), orderDetail.getUnitPrice(), orderDetail.getTotal()};
 
