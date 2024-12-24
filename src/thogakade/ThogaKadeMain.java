@@ -5,6 +5,7 @@
 package thogakade;
 import thogakade.View.AddCustomerForm;
 import thogakade.View.PlaceOrderForm;
+import thogakade.View.SearchCustomerForm;
 /**
  *
  * @author Sahan Chamara
@@ -15,7 +16,8 @@ public class ThogaKadeMain {
      */
     public static void main(String[] args) {      
 //        new PlaceOrderForm().setVisible(true);        
-           new AddCustomerForm().setVisible(true);
+//           new AddCustomerForm().setVisible(true);
+        new SearchCustomerForm().setVisible(true);
     }
     
 }

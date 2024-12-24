@@ -4,6 +4,13 @@
  */
 package thogakade.View;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import thogakade.Controller.CustomerController;
+import thogakade.Model.Customer;
+
 /**
  *
  * @author Sahan Chamara
@@ -14,6 +21,7 @@ public class SearchCustomerForm extends javax.swing.JFrame {
      * Creates new form PlaceOrder
      */
     public SearchCustomerForm() {
+        initComponents();
 
     }
     // </editor-fold>
@@ -25,18 +33,19 @@ public class SearchCustomerForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        lblCusId = new javax.swing.JLabel();
-        btnAddItem = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
         btnPlaceOrder = new javax.swing.JButton();
-        lblCusSalary = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        lblCusName = new javax.swing.JTextField();
+        lblCusSalary = new javax.swing.JLabel();
+        txtCusId = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        lblCusAddress = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        lblCusName = new javax.swing.JLabel();
+        lblCusAddress = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(920, 650));
+        setMaximumSize(new java.awt.Dimension(441, 352));
+        setMinimumSize(new java.awt.Dimension(441, 352));
         getContentPane().setLayout(null);
 
         jLabel1.setBackground(new java.awt.Color(44, 88, 110));
@@ -58,21 +67,16 @@ public class SearchCustomerForm extends javax.swing.JFrame {
         getContentPane().add(jLabel3);
         jLabel3.setBounds(20, 220, 170, 25);
 
-        lblCusId.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblCusId.setText("generated id");
-        getContentPane().add(lblCusId);
-        lblCusId.setBounds(150, 80, 108, 25);
-
-        btnAddItem.setBackground(new java.awt.Color(233, 213, 39));
-        btnAddItem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnAddItem.setText("ADD CUSTOMER");
-        btnAddItem.addActionListener(new java.awt.event.ActionListener() {
+        btnSearch.setBackground(new java.awt.Color(233, 213, 39));
+        btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSearch.setText("SEARCH CUSTOMER");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddItemActionPerformed(evt);
+                btnSearchActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAddItem);
-        btnAddItem.setBounds(256, 280, 160, 26);
+        getContentPane().add(btnSearch);
+        btnSearch.setBounds(236, 280, 180, 26);
 
         btnPlaceOrder.setBackground(new java.awt.Color(233, 213, 39));
         btnPlaceOrder.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -85,26 +89,18 @@ public class SearchCustomerForm extends javax.swing.JFrame {
         getContentPane().add(btnPlaceOrder);
         btnPlaceOrder.setBounds(757, 570, 121, 37);
 
-        lblCusSalary.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lblCusSalaryActionPerformed(evt);
-            }
-        });
+        lblCusSalary.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblCusSalary.setText("salary");
         getContentPane().add(lblCusSalary);
-        lblCusSalary.setBounds(190, 220, 110, 30);
+        lblCusSalary.setBounds(190, 220, 170, 25);
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setText("Customer Name : ");
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(20, 120, 170, 25);
-
-        lblCusName.addActionListener(new java.awt.event.ActionListener() {
+        txtCusId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lblCusNameActionPerformed(evt);
+                txtCusIdActionPerformed(evt);
             }
         });
-        getContentPane().add(lblCusName);
-        lblCusName.setBounds(190, 120, 130, 30);
+        getContentPane().add(txtCusId);
+        txtCusId.setBounds(150, 80, 210, 30);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Customer Name : ");
@@ -116,53 +112,66 @@ public class SearchCustomerForm extends javax.swing.JFrame {
         getContentPane().add(jLabel6);
         jLabel6.setBounds(20, 170, 170, 25);
 
-        lblCusAddress.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lblCusAddressActionPerformed(evt);
-            }
-        });
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel7.setText("Customer Name : ");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(20, 120, 170, 25);
+
+        lblCusName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblCusName.setText("cus name");
+        getContentPane().add(lblCusName);
+        lblCusName.setBounds(180, 120, 170, 25);
+
+        lblCusAddress.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblCusAddress.setText("addres");
         getContentPane().add(lblCusAddress);
-        lblCusAddress.setBounds(190, 170, 190, 30);
+        lblCusAddress.setBounds(190, 170, 170, 25);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
-
-    }//GEN-LAST:event_btnAddItemActionPerformed
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        txtCusIdActionPerformed(evt);
+    }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
 
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
-    private void lblCusSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblCusSalaryActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblCusSalaryActionPerformed
+    private void txtCusIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCusIdActionPerformed
+        try {
+            Customer searchCustomer = CustomerController.searchCustomer(txtCusId.getText());
+            if (searchCustomer != null) {
+                lblCusName.setText(searchCustomer.getName());
+                lblCusAddress.setText(searchCustomer.getAddress());
+                lblCusSalary.setText(String.valueOf(searchCustomer.getSalary()));
+            }else{
+                JOptionPane.showMessageDialog(this, "Customer Not Found...");
+            }
 
-    private void lblCusNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblCusNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblCusNameActionPerformed
-
-    private void lblCusAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblCusAddressActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblCusAddressActionPerformed
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not Foound Exception " + ex.getMessage());
+        } catch (SQLException ex) {
+            System.out.println("SQL Exception " + ex.getMessage());
+        }
+    }//GEN-LAST:event_txtCusIdActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddItem;
     private javax.swing.JButton btnPlaceOrder;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField lblCusAddress;
-    private javax.swing.JLabel lblCusId;
-    private javax.swing.JTextField lblCusName;
-    private javax.swing.JTextField lblCusSalary;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel lblCusAddress;
+    private javax.swing.JLabel lblCusName;
+    private javax.swing.JLabel lblCusSalary;
+    private javax.swing.JTextField txtCusId;
     // End of variables declaration//GEN-END:variables
 }
