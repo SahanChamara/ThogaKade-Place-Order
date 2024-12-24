@@ -160,6 +160,7 @@ public class PlaceOrderForm extends javax.swing.JFrame {
         btnPlaceOrder = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocationByPlatform(true);
         setMaximumSize(new java.awt.Dimension(920, 650));
         setMinimumSize(new java.awt.Dimension(920, 650));
         setPreferredSize(new java.awt.Dimension(920, 650));
@@ -478,11 +479,16 @@ public class PlaceOrderForm extends javax.swing.JFrame {
         Orders orders = new Orders(orderId, date, customerId, orderDetailList);
         try {
             boolean isAdded = OrderController.placeOrder(orders);
+            if(isAdded){
+                JOptionPane.showMessageDialog(this, "Order Added Succesfull");
+            }else{
+                JOptionPane.showMessageDialog(this, "Order Added Failed");
+            }
             
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PlaceOrderForm.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Class not Found Exception " + ex.getMessage());
         } catch (SQLException ex) {
-            Logger.getLogger(PlaceOrderForm.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("SQL Exception " + ex.getMessage());
         }
         
         

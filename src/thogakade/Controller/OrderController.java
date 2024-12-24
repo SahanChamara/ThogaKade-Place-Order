@@ -4,6 +4,7 @@
  */
 package thogakade.Controller;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ import thogakade.Model.Orders;
  * @author Sahan Chamara
  */
 public class OrderController {
-
+    
     public static String getLastOrderId() throws ClassNotFoundException, SQLException {
         Statement stm = DBConnection.getInstance().getConnection().createStatement();
         ResultSet rst = stm.executeQuery("SELECT id FROM orders ORDER BY id DESC LIMIT 1");
@@ -29,21 +30,32 @@ public class OrderController {
 
     // Adding the order ID , Date and customer id to the Orders Table
     public static boolean placeOrder(Orders order) throws ClassNotFoundException, SQLException {
-        PreparedStatement prepareStm = DBConnection.getInstance().getConnection().prepareStatement("INSERT INTO orders VALUES(?,?,?)");
-        prepareStm.setObject(1, order.getId());
-        prepareStm.setObject(2, order.getDate());
-        prepareStm.setObject(3, order.getCustomerId());
+        Connection connection = DBConnection.getInstance().getConnection();
 
-        boolean isAdded = prepareStm.executeUpdate() > 0;
-        if (isAdded) {
-            boolean orderDetailAdded = OrderDetailController.addOrderDetail(order.getOrderDetailList());
-            if (orderDetailAdded) {
-                boolean isUpdateStock = ItemController.updateStock(order.getOrderDetailList());
-                if (isUpdateStock) {
-                    return true;
+        // Set Auto Commit false
+        connection.setAutoCommit(false);
+        try {
+            PreparedStatement prepareStm = connection.prepareStatement("INSERT INTO orders VALUES(?,?,?)");
+            prepareStm.setObject(1, order.getId());
+            prepareStm.setObject(2, order.getDate());
+            prepareStm.setObject(3, order.getCustomerId());
+            
+            boolean isAdded = prepareStm.executeUpdate() > 0;
+            if (isAdded) {
+                boolean orderDetailAdded = OrderDetailController.addOrderDetail(order.getOrderDetailList());
+                if (orderDetailAdded) {
+                    boolean isUpdateStock = ItemController.updateStock(order.getOrderDetailList());
+                    if (isUpdateStock) {
+                        connection.commit();
+                        return true;
+                    }
                 }
             }
+            connection.rollback();
+            return false;
+        } finally {
+            connection.setAutoCommit(true);
         }
-        return false;
+        
     }
 }
