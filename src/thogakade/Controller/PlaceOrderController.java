@@ -23,31 +23,6 @@ import thogakade.Model.OrderDetail;
  */
 public class PlaceOrderController {
 
-    public static String showDate() {
-        return new SimpleDateFormat("yyyy/MM/dd").format(new Date());
-    }
-
-    // generating order ID
-    public static String generateOrderId() throws ClassNotFoundException, SQLException {
-        Statement stm = DBConnection.getInstance().getConnection().createStatement();
-        ResultSet rst = stm.executeQuery("select id from orders order by id asc");
-
-        String newId = null;
-        if (rst.next()) {
-            newId = rst.getString("id");
-        }
-        while (rst.next()) {            
-            newId = rst.getString("id");
-            System.out.println(newId);
-//            rst.next();            
-        }
-        if (newId == null) {
-            return "D001";
-        } else {
-            int id = Integer.parseInt(newId.substring(1, 4));            
-            return String.format("D%03d", id + 1);            
-        }
-    }
 
     // Add Customer ID for combo Box
     public static ArrayList<Customer> getCustomerId() throws ClassNotFoundException, SQLException {
@@ -95,25 +70,7 @@ public class PlaceOrderController {
         return itemList;        
     }
     
-    // Adding the item for table
-    public static ArrayList<OrderDetail> loadTable(String code, String description, int qty, double unitPrice){        
-        ArrayList<OrderDetail> tableDetails = new ArrayList();
-        
-        double tot = qty*unitPrice;
-        
-        tableDetails.add(new OrderDetail(null,code,description,qty,unitPrice,tot));
-        
-//        for (int i = 0; i < tableDetails.size(); i++){                
-//            OrderDetails od = tableDetails.get(i);
-//            if(od.getItemCode().equalsIgnoreCase(code)){                
-//                tableDetails.add(new OrderDetails(null, null, null, qty, 0, tot));
-//            }else{
-//                tableDetails.add(new OrderDetails(null,code,description,qty,unitPrice,tot));
-//            }
-//        }
-        
-        return tableDetails;
-    }
+    
     
     //Adding order id,Date,customer id to order table
     public static boolean updateOrderTable(String orderId,String date,String cusId) throws ClassNotFoundException, SQLException{

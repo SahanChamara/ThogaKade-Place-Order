@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import thogakade.Controller.OrderController;
 import thogakade.Controller.PlaceOrderController;
 import thogakade.Model.Customer;
 import thogakade.Model.Item;
@@ -36,8 +37,8 @@ public class PlaceOrder extends javax.swing.JFrame {
         //Addint the Date
         showDate();
 
-        // Generate ID
-        addGeneratedId();
+        // Last Order ID
+        setLastOrderId();        
 
         //Updating Customer ID Combo BOx
         cusIdComboBox();
@@ -52,14 +53,19 @@ public class PlaceOrder extends javax.swing.JFrame {
         lblDate.setText(date);
     }
     
-    // Adding the Generated ID
-    private void addGeneratedId() {
+    // Adding the Last Order ID
+    private void setLastOrderId(){
         try {
-            String generateOrderId = PlaceOrderController.generateOrderId();
-            lblOrderId.setText(generateOrderId);
-
+            String lastOrderId = OrderController.getLastOrderId();
+            if(lastOrderId==null){
+                lblOrderId.setText("D001");
+            }else{
+                int newId = Integer.parseInt(lastOrderId.substring(1));
+                lblOrderId.setText(String.format("D%03d",newId+1));
+            }
+            
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class Not Found Exception " + ex.getMessage());
+            System.out.println("Class Not FOunt Exception " + ex.getMessage());
         } catch (SQLException ex) {
             System.out.println("SQL Exception " + ex.getMessage());
         }
@@ -368,25 +374,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         int qty = Integer.parseInt(txtQty.getText());
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
         
-        // this quantity and qtyOnHand variables are used for the update the item table qtyonhand
-        quantity = Integer.parseInt(txtQty.getText());
-        qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
-
-        ArrayList<OrderDetail> orderDetails = PlaceOrderController.loadTable(code, description, qty, unitPrice);
-        DefaultTableModel dtm = (DefaultTableModel) tblItems.getModel();
-
-        //Calculating Total price (set the lable)
-//        double totalPrice = 0;
-
-        for (OrderDetail orderDetail : orderDetails) {
-            
-            Object[] rowData = {orderDetail.getItemCode(), orderDetail.getDescription(), orderDetail.getQty(), orderDetail.getUnitPrice(), orderDetail.getTotal()};
-
-            dtm.addRow(rowData);
-            totalPrice+=orderDetail.getTotal();
-        }
         
-        lblTotal.setText(String.valueOf(totalPrice));
     }//GEN-LAST:event_btnAddItemActionPerformed
 
     private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveItemActionPerformed
