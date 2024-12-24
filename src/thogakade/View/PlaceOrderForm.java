@@ -4,12 +4,14 @@
  */
 package thogakade.View;
 
+import java.awt.TrayIcon;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import thogakade.Controller.CustomerController;
@@ -25,6 +27,7 @@ import thogakade.Model.OrderDetail;
  * @author Sahan Chamara
  */
 public class PlaceOrderForm extends javax.swing.JFrame {
+
     private double totalPrice;
     private int quantity;
     private int qtyOnHand;
@@ -40,7 +43,7 @@ public class PlaceOrderForm extends javax.swing.JFrame {
         showDate();
 
         // Last Order ID
-        setLastOrderId();        
+        setLastOrderId();
 
         //Updating Customer ID Combo BOx
         cusIdComboBox();
@@ -50,22 +53,22 @@ public class PlaceOrderForm extends javax.swing.JFrame {
     }
 
     // Order Date
-    private  void showDate() {
+    private void showDate() {
         String date = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
         lblDate.setText(date);
     }
-    
+
     // Adding the Last Order ID
-    private void setLastOrderId(){
+    private void setLastOrderId() {
         try {
             String lastOrderId = OrderController.getLastOrderId();
-            if(lastOrderId==null){
+            if (lastOrderId == null) {
                 lblOrderId.setText("D001");
-            }else{
+            } else {
                 int newId = Integer.parseInt(lastOrderId.substring(1));
-                lblOrderId.setText(String.format("D%03d",newId+1));
+                lblOrderId.setText(String.format("D%03d", newId + 1));
             }
-            
+
         } catch (ClassNotFoundException ex) {
             System.out.println("Class Not FOunt Exception " + ex.getMessage());
         } catch (SQLException ex) {
@@ -89,15 +92,27 @@ public class PlaceOrderForm extends javax.swing.JFrame {
 
     //Updating Combo Box in Item Code
     private void itemIdComboBox() {
-        try {            
+        try {
             for (String itemCode : ItemController.loadItemCodes()) {
                 comboItemCode.addItem(itemCode);
             }
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class NOT Found Exception "+ex.getMessage());
+            System.out.println("Class NOT Found Exception " + ex.getMessage());
         } catch (SQLException ex) {
-            System.out.println("SQL Exception "+ex.getMessage());
+            System.out.println("SQL Exception " + ex.getMessage());
         }
+    }
+
+    // searching the table adding items allready exist
+    private int isAlreadyExist(String itemCode) {
+        DefaultTableModel dtm = (DefaultTableModel) tblItems.getModel();
+        for (int i = 0; i < dtm.getRowCount(); i++) {
+            String tempItemCode = (String) dtm.getValueAt(i, 0);
+            if (tempItemCode.equals(itemCode)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @SuppressWarnings("unchecked")
@@ -268,7 +283,6 @@ public class PlaceOrderForm extends javax.swing.JFrame {
         txtQtyOnHand.setBounds(590, 220, 126, 26);
 
         txtQty.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtQty.setText("qty");
         txtQty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtQtyActionPerformed(evt);
@@ -366,16 +380,36 @@ public class PlaceOrderForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtQtyOnHandActionPerformed
 
     private void txtQtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQtyActionPerformed
-        // TODO add your handling code here:
+        try {
+            btnAddItemActionPerformed(evt);
+        } catch ( NumberFormatException ex) {
+//            JOptionPane.showMessageDialog(this, "Please Enter Valid Quantity");            
+            JOptionPane.showMessageDialog(this, "Please Enter Valid Quantity", "Error", JOptionPane.WARNING_MESSAGE, null);
+        }
+        
     }//GEN-LAST:event_txtQtyActionPerformed
 
     private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
-        String code = comboItemCode.getSelectedItem().toString();
-        String description = txtDesc.getText();
         int qty = Integer.parseInt(txtQty.getText());
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
-        
-        
+        double total = unitPrice * qty;
+
+        DefaultTableModel dtm = (DefaultTableModel) tblItems.getModel();
+
+        int alreadyExistItemRow = isAlreadyExist(comboItemCode.getSelectedItem().toString());
+        if (alreadyExistItemRow == -1) {
+            Object[] rowData = {comboItemCode.getSelectedItem().toString(), txtDesc.getText(), qty, unitPrice, total};
+            dtm.addRow(rowData);
+        } else {
+            qty += (int) dtm.getValueAt(alreadyExistItemRow, 2);
+            total = qty*unitPrice;
+            
+            dtm.setValueAt(qty, alreadyExistItemRow, 2);
+            dtm.setValueAt(total, alreadyExistItemRow, 4);
+        }
+        txtQty.setText("");
+
+
     }//GEN-LAST:event_btnAddItemActionPerformed
 
     private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveItemActionPerformed
@@ -388,18 +422,27 @@ public class PlaceOrderForm extends javax.swing.JFrame {
             String cusName = CustomerController.searchCustomer(selecCusId).getName();
             lblCusName.setText(cusName);
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class not Found Exception "+ex.getMessage());
+            System.out.println("Class not Found Exception " + ex.getMessage());
         } catch (SQLException ex) {
-            System.out.println("SQL Exception "+ex.getMessage());
+            System.out.println("SQL Exception " + ex.getMessage());
         }
     }//GEN-LAST:event_comboCusIdItemStateChanged
 
     private void comboItemCodeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboItemCodeItemStateChanged
-  
+        try {
+            Item searchItem = ItemController.searchItem(comboItemCode.getSelectedItem().toString());
+            txtDesc.setText(searchItem.getDescription());
+            txtUnitPrice.setText(String.valueOf(searchItem.getUnitPrice()));
+            txtQtyOnHand.setText(String.valueOf(searchItem.getQtyOnHand()));
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not Found Exception " + ex.getMessage());
+        } catch (SQLException ex) {
+            System.out.println("SQL Exception " + ex.getMessage());
+        }
     }//GEN-LAST:event_comboItemCodeItemStateChanged
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
-       
+
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     /**
