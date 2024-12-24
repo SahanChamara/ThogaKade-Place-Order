@@ -50,4 +50,17 @@ public class CustomerController {
         return null;
     }
 
+    // load Customer IDs for combo Box    
+    public static ArrayList<Customer> getCustomerId() throws ClassNotFoundException, SQLException {
+        ArrayList<Customer> customerIdList = new ArrayList<>();
+        
+        Statement stm = DBConnection.getInstance().getConnection().createStatement();
+        ResultSet rst = stm.executeQuery("select id from customer");
+        while (rst.next()){
+            customerIdList.add(new Customer(rst.getString("id"), null, null, 0));            
+        }
+        return customerIdList;
+        
+        // we can use the ArrayList<String> for return this.....
+    }
 }

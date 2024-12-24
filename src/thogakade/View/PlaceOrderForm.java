@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import thogakade.Controller.CustomerController;
+import thogakade.Controller.ItemController;
 import thogakade.Controller.OrderController;
 import thogakade.Controller.PlaceOrderController;
 import thogakade.Model.Customer;
@@ -74,7 +76,7 @@ public class PlaceOrderForm extends javax.swing.JFrame {
     //Updating combo Box in Customers ID
     private void cusIdComboBox() {
         try {
-            ArrayList<Customer> customerId = PlaceOrderController.getCustomerId();
+            ArrayList<Customer> customerId = CustomerController.getCustomerId();
             for (Customer customer : customerId) {
                 comboCusId.addItem(customer.getId());
             }
@@ -87,15 +89,14 @@ public class PlaceOrderForm extends javax.swing.JFrame {
 
     //Updating Combo Box in Item Code
     private void itemIdComboBox() {
-        try {
-            ArrayList<Item> itemCode = PlaceOrderController.getItemCode();
-            for (Item item : itemCode) {
-                comboItemCode.addItem(item.getCode());
+        try {            
+            for (String itemCode : ItemController.loadItemCodes()) {
+                comboItemCode.addItem(itemCode);
             }
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class Not FOunt Exception " + ex.getMessage());
+            System.out.println("Class NOT Found Exception "+ex.getMessage());
         } catch (SQLException ex) {
-            System.out.println("SQL Exception " + ex.getMessage());
+            System.out.println("SQL Exception "+ex.getMessage());
         }
     }
 
@@ -384,52 +385,21 @@ public class PlaceOrderForm extends javax.swing.JFrame {
     private void comboCusIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboCusIdItemStateChanged
         String selecCusId = comboCusId.getSelectedItem().toString();
         try {
-            String customerName = PlaceOrderController.getCustomerName(selecCusId);
-            lblCusName.setText(customerName);
-
+            String cusName = CustomerController.searchCustomer(selecCusId).getName();
+            lblCusName.setText(cusName);
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class Not Found Exception " + ex.getMessage());
+            System.out.println("Class not Found Exception "+ex.getMessage());
         } catch (SQLException ex) {
-            System.out.println("SQL Exception " + ex.getMessage());
+            System.out.println("SQL Exception "+ex.getMessage());
         }
     }//GEN-LAST:event_comboCusIdItemStateChanged
 
     private void comboItemCodeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboItemCodeItemStateChanged
-        String selectItemCode = comboItemCode.getSelectedItem().toString();
-        try {
-            ArrayList<Item> itemDetails = PlaceOrderController.getItemDetails(selectItemCode);
-            for (Item itemDetail : itemDetails) {
-                txtDesc.setText(itemDetail.getDescription());
-                txtUnitPrice.setText(String.valueOf(itemDetail.getUnitPrice()));
-                txtQtyOnHand.setText(String.valueOf(itemDetail.getQtyOnHand()));
-            }
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Class Not Found Exception " + ex.getMessage());
-        } catch (SQLException ex) {
-            System.out.println("SQL Exception " + ex.getMessage());
-        }
+  
     }//GEN-LAST:event_comboItemCodeItemStateChanged
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
-        try {
-            // Updating the Order Table
-            boolean tableIsUpdate = PlaceOrderController.updateOrderTable(lblOrderId.getText(),lblDate.getText(),comboCusId.getSelectedItem().toString());            
-            
-            if(tableIsUpdate){
-                System.out.println("Order Table Updated");
-            }
-            
-            // Updating the Item Table QtyonHand
-            boolean qtyOnHandUpdate = PlaceOrderController.updateItemTalbeQty(comboItemCode.getSelectedItem().toString(),quantity,qtyOnHand);
-            if(qtyOnHandUpdate){
-                System.out.println("qty on hand updated");
-            }
-            
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Class Not Found Exception " + ex.getMessage());
-        } catch (SQLException ex) {
-            System.out.println("SQL Exception " + ex.getMessage());
-        }
+       
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     /**

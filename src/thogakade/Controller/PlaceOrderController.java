@@ -22,54 +22,13 @@ import thogakade.Model.OrderDetail;
  * @author Sahan Chamara
  */
 public class PlaceOrderController {
-
-
-    // Add Customer ID for combo Box
-    public static ArrayList<Customer> getCustomerId() throws ClassNotFoundException, SQLException {
-        ArrayList<Customer> customerIdList = new ArrayList<>();
-        
-        Statement stm = DBConnection.getInstance().getConnection().createStatement();
-        ResultSet rst = stm.executeQuery("select id from customer");
-        while (rst.next()){
-            customerIdList.add(new Customer(rst.getString("id"), null, null, 0));            
-        }
-        return customerIdList;
-    }
-
-    // Add Customer name for selecting combo box id
-    public static String getCustomerName(String id) throws ClassNotFoundException, SQLException{
-        Statement stm = DBConnection.getInstance().getConnection().createStatement();
-        ResultSet rst = stm.executeQuery("select name from customer where id='"+id+"'");
-        if(rst.next()){
-            return rst.getString("name");
-        }        
-        return null;
-    }
     
     // Add item ID for Combo Box
-    public static ArrayList<Item> getItemCode() throws ClassNotFoundException, SQLException{
-        ArrayList<Item> itemCodeList = new ArrayList<>();
-        
-        Statement stm = DBConnection.getInstance().getConnection().createStatement();
-        ResultSet rst = stm.executeQuery("select code from item");
-        while(rst.next()){
-            itemCodeList.add(new Item(rst.getString("code"), null, 0, 0));
-        }
-        return itemCodeList;
-    }
     
+    
+  
     // Add selected item for text feilds
-    public static ArrayList<Item> getItemDetails(String itemCode) throws ClassNotFoundException, SQLException{
-        ArrayList<Item> itemList = new ArrayList<>();
-        
-        Statement stm = DBConnection.getInstance().getConnection().createStatement();
-        ResultSet rst = stm.executeQuery("select description,unitPrice,qtyOnHand from item where code='"+itemCode+"'");
-        if(rst.next()){
-            itemList.add(new Item(null, rst.getString("description"), rst.getDouble("unitPrice"), rst.getInt("qtyOnHand")));            
-        }
-        return itemList;        
-    }
-    
+  
     
     
     //Adding order id,Date,customer id to order table

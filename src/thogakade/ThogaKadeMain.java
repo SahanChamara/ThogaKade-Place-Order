@@ -15,9 +15,9 @@ public class ThogaKadeMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {      
-//        new PlaceOrderForm().setVisible(true);        
+        new PlaceOrderForm().setVisible(true);        
 //           new AddCustomerForm().setVisible(true);
-        new SearchCustomerForm().setVisible(true);
+//        new SearchCustomerForm().setVisible(true);
     }
     
 }
