@@ -32,9 +32,9 @@ public class OrderController {
     public static boolean placeOrder(Orders order) throws ClassNotFoundException, SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
 
-        // Set Auto Commit false
-        connection.setAutoCommit(false);
-        try {
+        try {            
+            // Set Auto Commit false
+            connection.setAutoCommit(false);
             PreparedStatement prepareStm = connection.prepareStatement("INSERT INTO orders VALUES(?,?,?)");
             prepareStm.setObject(1, order.getId());
             prepareStm.setObject(2, order.getDate());
